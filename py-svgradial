@@ -51,8 +51,12 @@ class RadialGraph():
         axis_angle = 2 * pi / axis_count
         for i in range(0, axis_count):
             current_angle = axis_angle * i
-            svg += '\n\
-    <path d="M 0,0 ' + str(sin(current_angle) * 96) + ',' + str(-cos(current_angle) * 96) + '" id="' + self.axis[i] + '" style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />'
+            svg += '''
+    <path d="M 0,0 ''' +\
+        str(sin(current_angle) * 96) + ',' +\
+        str(-cos(current_angle) * 96) + '" id="' +\
+        self.axis[i] + '" style="fill:none;stroke:#000000;stroke-width:1px;\
+stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />'
         
         svg += '''
   </g>
@@ -61,8 +65,10 @@ class RadialGraph():
         for i in range(0, axis_count):
             current_angle = axis_angle * i
             value = float(self.values[i]) / float(self.max_value)
-            svg += str(sin(current_angle) * 96.0 * value) + ',' + str(-cos(current_angle) * 96.0 * value) + ' '
-        svg += '''z" id="foreground" style="fill:#cc4444;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+            svg += str(sin(current_angle) * 96.0 * value) + ',' +\
+                   str(-cos(current_angle) * 96.0 * value) + ' '
+        svg += '''z" id="foreground" style="fill:#cc4444;stroke:#000000;\
+stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
   </g>
 </svg>'''
         return svg
