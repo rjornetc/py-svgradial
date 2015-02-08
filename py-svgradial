@@ -43,10 +43,6 @@ class RadialGraph():
         self.axis_title = axis_title
     
     
-    #def add_axis(self, axis):
-        #self.axis_title.append(axis)
-    
-    
     def add_serie(self, serie):
         if len(serie.values) == len(self.axis_title):
             self.series.append(serie)
@@ -68,7 +64,9 @@ class RadialGraph():
   xmlns:cc="http://creativecommons.org/ns#"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xmlns:svg="http://www.w3.org/2000/svg"
-  xmlns="http://www.w3.org/2000/svg" width="256" height="256"
+  xmlns="http://www.w3.org/2000/svg"
+  width="256"
+  height="256"
 >
   <g transform="translate(128,128)" id="background">'''
         axis_title_count = len(self.axis_title)
@@ -79,9 +77,18 @@ class RadialGraph():
     <path d="M 0,0 ''' +\
         str(sin(current_angle) * 96) + ',' +\
         str(-cos(current_angle) * 96) + '" id="' +\
-        self.axis_title[i] + '" style="stroke:#777777" />'
+        self.axis_title[i] + '''-axis" style="stroke:#777777" />
+    <text
+      style="font-size:16px;text-align:center;fill:#000000"
+      id="''' + self.axis_title[i] + '''-text"
+      ><tspan
+        id="''' + self.axis_title[i] + '''-tspan"
+        x="''' + str(sin(current_angle) * 112) + '''"
+        y="''' + str(-cos(current_angle) * 112) + '''"
+        style="text-align:center;line-height:0%;text-anchor:middle"
+        dy="5.5">''' + self.axis_title[i] + '''</tspan></text>'''
         
-        svg += '\n  </g>'
+        svg += '  </g>'
         
         for serie in self.series:
             svg += '''
@@ -100,7 +107,7 @@ class RadialGraph():
         return svg
 
 if __name__ == '__main__':
-    rg = RadialGraph('test', ['a', 'b', 'c', 'd', 'e'])
+    rg = RadialGraph('test', ['Str', 'Con', 'Dex', 'Cog', 'Int'])
     s1 = RadialGraphSerie('s1', '#00ff00')
     s1.set_values([8, 9, 7 ,5 ,4])
     s2 = RadialGraphSerie('s2')
