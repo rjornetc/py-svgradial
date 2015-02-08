@@ -13,7 +13,7 @@ without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 <http://www.gnu.org/licenses/>'''
 __date__ = '08/02/2015'
-__version__ = '0.0.0'
+__version__ = '0.1.0'
 
 
 from math import cos, sin, pi
@@ -21,21 +21,29 @@ from math import cos, sin, pi
 class RadialGraph():
     
     title = ''
-    axis = []
-    values = []
+    axis_title = []
+    series = {}
     min_value = 0
     max_value = 10
     
     def __init__(self, title):
-        self.title = title 
+        self.title = title
     
     
-    def addValue(self, axis, value):
-        self.axis.append(axis)
-        self.values.append(value)
+    def add_axis(self, axis):
+        self.axis_title.append(axis)
     
     
-    def getSVG(self):
+    def add_serie(self, serie):
+        self.series[serie] = [0,0,0,0,0]
+    
+    
+    def add_value(self, serie, axis_title, value):
+        axis_index = self.axis_title.index(axis_title)
+        self.series[serie][axis_index] = value
+    
+    
+    def get_svg(self):
         svg = '''<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
@@ -47,52 +55,52 @@ class RadialGraph():
   xmlns="http://www.w3.org/2000/svg" width="256" height="256"
 >
   <g transform="translate(128,128)" id="background">'''
-        axis_count = len(self.axis)
-        axis_angle = 2 * pi / axis_count
-        for i in range(0, axis_count):
-            current_angle = axis_angle * i
+        axis_title_count = len(self.axis_title)
+        axis_title_angle = 2 * pi / axis_title_count
+        for i in range(0, axis_title_count):
+            current_angle = axis_title_angle * i
             svg += '''
     <path d="M 0,0 ''' +\
         str(sin(current_angle) * 96) + ',' +\
         str(-cos(current_angle) * 96) + '" id="' +\
-        self.axis[i] + '" style="fill:none;stroke:#000000;stroke-width:1px;\
+        self.axis_title[i] + '" style="fill:none;stroke:#000000;stroke-width:1px;\
 stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />'
         
-        svg += '''
-  </g>
-  <g transform="translate(128,128)" id="foreground">
+        svg += '\n  </g>'
+        
+        for serie in self.series.keys():
+            svg += '''
+  <g transform="translate(128,128)" id="''' + serie + '''">
     <path d="M '''
-        for i in range(0, axis_count):
-            current_angle = axis_angle * i
-            value = float(self.values[i]) / float(self.max_value)
-            svg += str(sin(current_angle) * 96.0 * value) + ',' +\
-                   str(-cos(current_angle) * 96.0 * value) + ' '
-        svg += '''z" id="foreground" style="fill:#cc4444;stroke:#000000;\
+            for i in range(0, axis_title_count):
+                current_angle = axis_title_angle * i
+                value = float(self.series[serie][i]) / float(self.max_value)
+                svg += str(sin(current_angle) * 96.0 * value) + ',' +\
+                       str(-cos(current_angle) * 96.0 * value) + ' '
+            svg += '''z" id="foreground" style="fill:none;stroke:#000000;\
 stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
-  </g>
+  </g>'''
+        svg += '''
 </svg>'''
         return svg
 
 if __name__ == '__main__':
     rg = RadialGraph('test')
-    rg.addValue('STR', 0.0)
-    rg.addValue('INT', 0.5)
-    rg.addValue('STR', 1.0)
-    rg.addValue('INT', 1.5)
-    rg.addValue('STR', 2.0)
-    rg.addValue('INT', 2.5)
-    rg.addValue('STR', 3.0)
-    rg.addValue('INT', 3.5)
-    rg.addValue('STR', 4.0)
-    rg.addValue('INT', 4.5)
-    rg.addValue('STR', 5.0)
-    rg.addValue('INT', 5.5)
-    rg.addValue('STR', 6.0)
-    rg.addValue('INT', 6.5)
-    rg.addValue('STR', 7.0)
-    rg.addValue('INT', 7.5)
-    rg.addValue('STR', 8.0)
-    rg.addValue('INT', 8.5)
-    rg.addValue('STR', 9.0)
-    rg.addValue('INT', 9.5)
-    print(rg.getSVG())
+    rg.add_axis(':C')
+    rg.add_axis(':(')
+    rg.add_axis(':|')
+    rg.add_axis(':)')
+    rg.add_axis(':D')
+    rg.add_serie('pep')
+    rg.add_value('pep', ':C', 8)
+    rg.add_value('pep', ':(', 9)
+    rg.add_value('pep', ':|', 7)
+    rg.add_value('pep', ':)', 5)
+    rg.add_value('pep', ':D', 4)
+    rg.add_serie('other')
+    rg.add_value('other', ':C', 4)
+    rg.add_value('other', ':(', 4)
+    rg.add_value('other', ':|', 4)
+    rg.add_value('other', ':)', 4)
+    rg.add_value('other', ':D', 4)
+    print(rg.get_svg())
