@@ -63,8 +63,7 @@ class RadialGraph():
     <path d="M 0,0 ''' +\
         str(sin(current_angle) * 96) + ',' +\
         str(-cos(current_angle) * 96) + '" id="' +\
-        self.axis_title[i] + '" style="fill:none;stroke:#000000;stroke-width:1px;\
-stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />'
+        self.axis_title[i] + '" style="stroke:#777777" />'
         
         svg += '\n  </g>'
         
@@ -77,8 +76,7 @@ stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />'
                 value = float(self.series[serie][i]) / float(self.max_value)
                 svg += str(sin(current_angle) * 96.0 * value) + ',' +\
                        str(-cos(current_angle) * 96.0 * value) + ' '
-            svg += '''z" id="foreground" style="fill:none;stroke:#000000;\
-stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+            svg += '''z" id="foreground" style="fill:none;stroke:#000000" />
   </g>'''
         svg += '''
 </svg>'''
