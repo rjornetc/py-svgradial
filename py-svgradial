@@ -18,24 +18,40 @@ __version__ = '0.1.0'
 
 from math import cos, sin, pi
 
+class RadialGraphSerie():
+    title = ''
+    color = ''
+    values = []
+    
+    def __init__(self, title, color='#ff0000'):
+        self.title = title
+        self.color = color
+    
+    def set_values(self, values):
+        self.values = values
+
 class RadialGraph():
     
     title = ''
     axis_title = []
-    series = {}
+    series = []
     min_value = 0
     max_value = 10
     
-    def __init__(self, title):
+    def __init__(self, title, axis_title):
         self.title = title
+        self.axis_title = axis_title
     
     
-    def add_axis(self, axis):
-        self.axis_title.append(axis)
+    #def add_axis(self, axis):
+        #self.axis_title.append(axis)
     
     
     def add_serie(self, serie):
-        self.series[serie] = [0,0,0,0,0]
+        if len(serie.values) == len(self.axis_title):
+            self.series.append(serie)
+        else:
+            print(':(') #TODO Raise
     
     
     def add_value(self, serie, axis_title, value):
@@ -67,38 +83,28 @@ class RadialGraph():
         
         svg += '\n  </g>'
         
-        for serie in self.series.keys():
+        for serie in self.series:
             svg += '''
-  <g transform="translate(128,128)" id="''' + serie + '''">
+  <g transform="translate(128,128)" id="''' + serie.title + '''">
     <path d="M '''
             for i in range(0, axis_title_count):
                 current_angle = axis_title_angle * i
-                value = float(self.series[serie][i]) / float(self.max_value)
+                value = float(serie.values[i]) / float(self.max_value)
                 svg += str(sin(current_angle) * 96.0 * value) + ',' +\
                        str(-cos(current_angle) * 96.0 * value) + ' '
-            svg += '''z" id="foreground" style="fill:none;stroke:#000000" />
+            svg += '''z" id="foreground" style="fill:none;stroke:''' +\
+              serie.color + '''" />
   </g>'''
         svg += '''
 </svg>'''
         return svg
 
 if __name__ == '__main__':
-    rg = RadialGraph('test')
-    rg.add_axis(':C')
-    rg.add_axis(':(')
-    rg.add_axis(':|')
-    rg.add_axis(':)')
-    rg.add_axis(':D')
-    rg.add_serie('pep')
-    rg.add_value('pep', ':C', 8)
-    rg.add_value('pep', ':(', 9)
-    rg.add_value('pep', ':|', 7)
-    rg.add_value('pep', ':)', 5)
-    rg.add_value('pep', ':D', 4)
-    rg.add_serie('other')
-    rg.add_value('other', ':C', 4)
-    rg.add_value('other', ':(', 4)
-    rg.add_value('other', ':|', 4)
-    rg.add_value('other', ':)', 4)
-    rg.add_value('other', ':D', 4)
+    rg = RadialGraph('test', ['a', 'b', 'c', 'd', 'e'])
+    s1 = RadialGraphSerie('s1', '#00ff00')
+    s1.set_values([8, 9, 7 ,5 ,4])
+    s2 = RadialGraphSerie('s2')
+    s2.set_values([4, 4, 4 ,4 ,4])
+    rg.add_serie(s1)
+    rg.add_serie(s2)
     print(rg.get_svg())
