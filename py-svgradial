@@ -37,7 +37,7 @@ class RadialGraphSerie():
 class RadialGraph():
     
     title = ''
-    axis_title = []
+    axes_title = []
     axis_color = '#777777'
     axis_color_secundary = '#cccccc'
     series = []
@@ -46,20 +46,20 @@ class RadialGraph():
     radial_lines = 10
     radial_axis_primary = 2
     
-    def __init__(self, title, axis_title):
+    def __init__(self, title, axes_title):
         self.title = title
-        self.axis_title = axis_title
+        self.axes_title = axes_title
     
     
     def add_serie(self, serie):
-        if len(serie.values) == len(self.axis_title):
+        if len(self.axes_title) == len(serie.values):
             self.series.append(serie)
         else:
-            print(':(') #TODO Raise
+            raise(IndexError('The number of axes and values must be equal')
     
     
-    def add_value(self, serie, axis_title, value):
-        axis_index = self.axis_title.index(axis_title)
+    def add_value(self, serie, axes_title, value):
+        axis_index = self.axes_title.index(axes_title)
         self.series[serie][axis_index] = value
     
     
@@ -77,8 +77,8 @@ class RadialGraph():
   height="256"
 >
   <g transform="translate(128,128)" id="background">'''
-        axis_title_count = len(self.axis_title)
-        axis_title_angle = 2 * pi / axis_title_count
+        axes_title_count = len(self.axes_title)
+        axes_title_angle = 2 * pi / axes_title_count
         radial_lines_space = 96.0 / self.radial_lines
         for i in range(1, self.radial_lines+1):
             svg += '''
@@ -88,29 +88,29 @@ class RadialGraph():
             else:
                 current_color = self.axis_color_secundary
             
-            for j in range(0, axis_title_count):
-                current_angle = axis_title_angle * (j)
+            for j in range(0, axes_title_count):
+                current_angle = axes_title_angle * (j)
                 svg += str(sin(current_angle) * radial_lines_space * i) + ',' +\
                        str(-cos(current_angle) * radial_lines_space * i) + ' '
             svg += '''z" id="radial-line''' + str(i) + '''" style="fill:none;stroke:''' + current_color + '''" />'''
         
-        for i in range(0, axis_title_count):
-            current_angle = axis_title_angle * i
+        for i in range(0, axes_title_count):
+            current_angle = axes_title_angle * i
             svg += '''
     <path d="M 0,0 ''' +\
         str(sin(current_angle) * 96) + ',' +\
         str(-cos(current_angle) * 96) + '" id="' +\
-        self.axis_title[i] + '''-axis" style="stroke:#777777" />
+        self.axes_title[i] + '''-axis" style="stroke:#777777" />
     <text
       style="font-size:16px;text-align:center;fill:#000000"
-      id="''' + self.axis_title[i] + '''-text"
+      id="''' + self.axes_title[i] + '''-text"
     >
       <tspan
-        id="''' + self.axis_title[i] + '''-tspan"
+        id="''' + self.axes_title[i] + '''-tspan"
         x="''' + str(sin(current_angle) * 112) + '''"
         y="''' + str(-cos(current_angle) * 112) + '''"
         style="text-align:center;line-height:0%;text-anchor:middle"
-        dy="5.5">''' + self.axis_title[i] + '''
+        dy="5.5">''' + self.axes_title[i] + '''
       </tspan>
     </text>
   '''
@@ -121,8 +121,8 @@ class RadialGraph():
             svg += '''
   <g transform="translate(128,128)" id="''' + serie.title + '''">
     <path d="M '''
-            for i in range(0, axis_title_count):
-                current_angle = axis_title_angle * i
+            for i in range(0, axes_title_count):
+                current_angle = axes_title_angle * i
                 value = float(serie.values[i]) / float(self.max_value)
                 svg += str(sin(current_angle) * 96.0 * value) + ',' +\
                        str(-cos(current_angle) * 96.0 * value) + ' '
