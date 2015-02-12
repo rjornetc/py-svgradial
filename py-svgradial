@@ -64,7 +64,8 @@ class RadialGraph():
     
     
     def get_svg(self):
-        svg = '''<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+        svg = \
+'''<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
@@ -92,7 +93,8 @@ class RadialGraph():
                 current_angle = axes_title_angle * (j)
                 svg += str(sin(current_angle) * radial_lines_space * i) + ',' +\
                        str(-cos(current_angle) * radial_lines_space * i) + ' '
-            svg += '''z" id="radial-line''' + str(i) + '''" style="fill:none;stroke:''' + current_color + '''" />'''
+            svg +=  \
+'''z" id="radial-line''' + str(i) + '''" style="fill:none;stroke:''' + current_color + '''" />'''
         
         for i in range(0, axes_title_count):
             current_angle = axes_title_angle * i
