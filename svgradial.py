@@ -178,17 +178,18 @@ class SVGRadialChart():
                 point = (center + sin(current_angle) * radial_lines_space * i,
                          center - cos(current_angle) * radial_lines_space * i)
                 path.append(point)
-            svg.add(svg.polygon(path,
-                                 stroke=current_color,
-                                 fill='none'))
+            self.svg.add(self.svg.polygon(path,
+                                          stroke=current_color,
+                                          fill='none'))
       
         for i in range(0, axes_title_count):
             current_angle = axes_title_angle * i
             point = (center + sin(current_angle) * canvas,
                      center - cos(current_angle) * canvas)
-            svg.add(svg.line(start=(center,center),
-                             end=point,
-                             stroke=self.chart.axis_color))
+            self.svg.add(self.svg.line(start=(center,
+                                              center),
+                                       end=point,
+                                       stroke=self.chart.axis_color))
             
         for serie in self.chart.series:
             path = []
@@ -198,9 +199,9 @@ class SVGRadialChart():
                 point = (center + sin(current_angle) * canvas * value,
                          center - cos(current_angle) * canvas * value)
                 path.append(point)
-            svg.add(svg.polygon(path,
-                                stroke=serie.border_color,
-                                fill=serie.fill_color,
-                                fill_opacity=serie.fill_opacity))
-            
-        return svg
+            self.svg.add(self.svg.polygon(path,
+                                          stroke=serie.border_color,
+                                          fill=serie.fill_color,
+                                          fill_opacity=serie.fill_opacity))
+              
+        return self.svg
