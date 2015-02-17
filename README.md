@@ -1,2 +1,2 @@
 # svgradial
-A light svg radial graph generator module for python
+A light svg chart graph generator module for python
