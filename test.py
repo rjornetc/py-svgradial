@@ -15,4 +15,6 @@ if __name__ == '__main__':
     rg.add_serie(s2)
     rg.add_serie(s3)
     svg = svgradial.SVGRadialChart(rg,160)
-    svg.get_svg('test.svg').save()
+    svg.draw_axes()
+    svg.draw_series()
+    svg.svg.save()
