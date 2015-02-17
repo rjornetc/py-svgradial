@@ -83,6 +83,25 @@ class SVGRadialChart():
                                           str(self.size) + 'px'),
                                     profile='tiny')
     
+    def _draw_axis(self, distance, color):
+        axes_title_count = len(self.chart.axes_title)
+        axes_title_angle = 2 * pi / axes_title_count
+        center = self.size / 2
+        
+        path=[]
+        for i in range(0, axes_title_count):
+            current_angle = axes_title_angle * i
+            point = (center +
+                         sin(current_angle) * distance,
+                     center -
+                         cos(current_angle) * distance)
+            path.append(point)
+        self.svg.add(self.svg.polygon(path,
+                                      stroke=color,
+                                      fill='none'))
+        
+        
+    
     def draw_axes(self,
                   horizontal_axes = True,
                   secundary_horizontal_axes = True,
@@ -97,24 +116,11 @@ class SVGRadialChart():
         if horizontal_axes:
             for i in range(1, self.chart.radial_lines + 1):
                 if i % self.chart.radial_axis_primary == 0:
-                    axis_color = self.chart.axis_color
-                else:
-                    axis_color = self.chart.axis_color_secundary
-                if i % self.chart.radial_axis_primary == 0 or\
-                   secundary_horizontal_axes:
-                    path=[]
-                    for j in range(0, axes_title_count):
-                        current_angle = axes_title_angle * j
-                        point = (center +
-                                     sin(current_angle) *
-                                     radial_lines_space * i,
-                                 center -
-                                     cos(current_angle) *
-                                     radial_lines_space * i)
-                        path.append(point)
-                    self.svg.add(self.svg.polygon(path,
-                                                  stroke=axis_color,
-                                                  fill='none'))
+                    self._draw_axis(radial_lines_space * i ,
+                                    self.chart.axis_color)
+                elif secundary_horizontal_axes:
+                    self._draw_axis(radial_lines_space * i ,
+                                    self.chart.axis_color_secundary)
 
         if vertical_axes:
             for i in range(0, axes_title_count):
