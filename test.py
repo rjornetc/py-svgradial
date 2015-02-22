@@ -4,9 +4,9 @@
 import svgradial
 
 if __name__ == '__main__':
-    rg = svgradial.RadialChart(['Str', 'Con', 'Dex', 'Cog', 'Int'], 'test')
+    rg = svgradial.RadialChart(['Str', 'Con', 'Dex', 'Cog', 'Int'], 'test', radial_axis_primary=5)
     s1 = svgradial.RadialChartSerie('s1', '#00ff00', '#00cc00')
-    s1.set_values([8, 9, 7 ,5 ,4])
+    s1.set_values([-10, 9, 7 ,5 ,4])
     s2 = svgradial.RadialChartSerie('s2')
     s2.set_values([4, 4, 4 ,4 ,4])
     s3 = svgradial.RadialChartSerie('s3', '#882244', '#441122', 0.5)

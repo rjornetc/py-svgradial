@@ -50,11 +50,11 @@ class RadialChart():
     def __init__(self,
                  axes_title,
                  title = 'New chart',
-                 axis_color = '#777',
-                 axis_color_secundary = '#ccc',
-                 min_value = 0,
-                 max_value = 10,
-                 radial_lines = 10,
+                 axis_color = '#ccc',
+                 axis_color_secundary = '#777',
+                 min_value = -1,
+                 max_value = -1,
+                 radial_lines = -1,
                  radial_axis_primary = 2):
         
         self.title = title
@@ -126,11 +126,34 @@ class SVGRadialChart():
         axes_title_angle = 2 * pi / axes_title_count
         center = self.size / 2
         canvas = center * (1 - self.margin)
-        radial_lines_space = canvas / self.chart.radial_lines
+        
+        if self.chart.max_value == self.chart.min_value:
+            min_value = self.chart.series[0].values[0]
+            max_value = self.chart.series[0].values[0]
+            for serie in self.chart.series:
+                for value in serie.values:
+                    if max_value < value:
+                        max_value = value
+                    if min_value > value:
+                        min_value = value
+        else:
+            max_value = self.chart.max_value
+            min_value = self.chart.min_value
+        
+        if self.chart.radial_lines < 0:
+            radial_lines = max_value - min_value
+        else:
+            radial_lines = self.chart.radial_lines
+        
+        
+        radial_lines_space = canvas / radial_lines
+        
+        
 
+        
         if horizontal_axes:
-            for i in range(1, self.chart.radial_lines + 1):
-                if i % self.chart.radial_axis_primary == 0:
+            for i in range(1, radial_lines + 1):
+                if (i + min_value % self.chart.radial_axis_primary) % self.chart.radial_axis_primary == 0:
                     self._draw_axis(radial_lines_space * i ,
                                     self.chart.axis_color)
                 elif secundary_horizontal_axes:
@@ -155,11 +178,24 @@ class SVGRadialChart():
         center = self.size / 2
         canvas = center * (1 - self.margin)
         
+        if self.chart.max_value == self.chart.min_value:
+            min_value = self.chart.series[0].values[0]
+            max_value = self.chart.series[0].values[0]
+            for serie in self.chart.series:
+                for value in serie.values:
+                    if max_value < value:
+                        max_value = value
+                    if min_value > value:
+                        min_value = value
+        else:
+            max_value = self.chart.max_value
+            min_value = self.chart.min_value
+        
         for serie in self.chart.series:
             path = []
             for i in range(0, axes_title_count):
                 current_angle = axes_title_angle * i
-                value = float(serie.values[i]) / float(self.chart.max_value)
+                value = float(- min_value + serie.values[i]) / float(- min_value + max_value)
                 point = (center + sin(current_angle) * canvas * value,
                          center - cos(current_angle) * canvas * value)
                 path.append(point)
