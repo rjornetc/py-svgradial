@@ -39,17 +39,32 @@ class RadialChart():
     
     title = ''
     axes_title = []
-    axis_color = '#777777'
-    axis_color_secundary = '#cccccc'
+    axis_color = ''
+    axis_color_secundary = ''
     series = []
     min_value = 0
-    max_value = 10
-    radial_lines = 10
-    radial_axis_primary = 2
+    max_value = 0
+    radial_lines = 0
+    radial_axis_primary = 0
     
-    def __init__(self, title, axes_title):
+    def __init__(self,
+                 axes_title,
+                 title = 'New chart',
+                 axis_color = '#777',
+                 axis_color_secundary = '#ccc',
+                 min_value = 0,
+                 max_value = 10,
+                 radial_lines = 10,
+                 radial_axis_primary = 2):
+        
         self.title = title
         self.axes_title = axes_title
+        self.axis_color = axis_color
+        self.axis_color_secundary = axis_color_secundary
+        self.min_value = min_value
+        self.max_value = max_value
+        self.radial_lines = radial_lines
+        self.radial_axis_primary = radial_axis_primary
     
     
     def add_serie(self, serie):
